@@ -10,6 +10,7 @@ import queries
 def trade_bot_blocker():
     # инициализируем логгер внутри функции, тогда он будет писать все от ее имени
     logger = logger_module.logger()
+    error_logger = logger_module.logger()
 
     # выполняем основной код
     try:
@@ -56,11 +57,11 @@ def trade_bot_blocker():
                 status, errors = True, False
                 # если статус добавления True, то адреса забанены корректно
                 if status:
-                    logger.info('Addresses banned: %s' % ', '.join(wait_ban_ip))
+                    logger.warning('Addresses banned: %s' % ', '.join(wait_ban_ip))
                     banned_bot_ip += wait_ban_ip
                 # если статус добавления False, то выводим в лог ошибку
                 else:
-                    logger.error('Banning error: %s' % str(errors))
+                    logger.warning('Banning error: %s' % str(errors))
 
                 # теперь можем неспешно получить дополнительные данные и указать полные сведения об данных адресах в логе
                 for bot_info in bot_info_collection:
@@ -85,7 +86,7 @@ def trade_bot_blocker():
                                 ' / '.join(sql_44_db_cn.execute_query(queries.user_info_query, bot_info['user_id'])[0])
 
                     # по каждому найденному боту пишем уведомление в лог
-                    logger.info(
+                    logger.warning(
                         'Banned bot : %(offer_per_second)s offers in second from %(ip)-15s (%(procedure_info)s | %(user_info)s)' %
                         bot_info)
 
