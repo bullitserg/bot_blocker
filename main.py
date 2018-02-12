@@ -53,8 +53,8 @@ def trade_bot_blocker():
             # если найдены ip для бана
             if wait_ban_ip:
                 # добавляем адреса в blacklist
-                # status, errors = k_worker.add_ip_list(wait_ban_ip, list_type='black')
-                status, errors = True, False
+                status, errors = k_worker.add_ip_list(wait_ban_ip, list_type='black')
+#                status, errors = True, False
                 # если статус добавления True, то адреса забанены корректно
                 if status:
                     logger.warning('Addresses banned: %s' % ', '.join(wait_ban_ip))
