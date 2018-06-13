@@ -63,7 +63,8 @@ def trade_bot_blocker():
                 else:
                     logger.warning('Banning error: %s' % str(errors))
 
-                # теперь можем неспешно получить дополнительные данные и указать полные сведения об данных адресах в логе
+                # теперь можем неспешно получить дополнительные данные и указать полные сведения
+                # о данных адресах в логе
                 for bot_info in bot_info_collection:
                     # добавляем информацию о процедуре из procedure_info
                     if bot_info['procedure_id'] in procedure_info.keys():
@@ -71,9 +72,11 @@ def trade_bot_blocker():
                     # если в procedure_info сведения отсутствуют, то получаем запросом
                     else:
                         with sql_44_db_cn.open():
-                            procedure_info['procedure_id'] = \
-                                bot_info['procedure_info'] = \
-                                sql_44_db_cn.execute_query(queries.procedure_info_query % bot_info['procedure_id'])[0][0]
+                            try:
+                                procedure_info['procedure_id'] = bot_info['procedure_info'] = \
+                                    sql_44_db_cn.execute_query(queries.procedure_info_query % bot_info['procedure_id'])[0][0]
+                            except IndexError:
+                                procedure_info['procedure_id'] = bot_info['procedure_info'] = 'Unknown'
 
                     # добавляем информацию об участнике из user_info
                     if bot_info['user_id'] in user_info.keys():
